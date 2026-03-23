@@ -122,6 +122,40 @@ impl eframe::App for Spriter {
             }
         }
 
+        if self.show_frame_size_dialog {
+            egui::Window::new("Frame Size")
+                .collapsible(false)
+                .resizable(false)
+                .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
+                .show(ctx, |ui| {
+                    ui.label("Enter frame dimensions for this sprite sheet:");
+                    ui.horizontal(|ui| {
+                        ui.label("Width:");
+                        ui.text_edit_singleline(&mut self.frame_size_input[0]);
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Height:");
+                        ui.text_edit_singleline(&mut self.frame_size_input[1]);
+                    });
+                    ui.horizontal(|ui| {
+                        if ui.button("OK").clicked() {
+                            if let (Ok(w), Ok(h)) = (
+                                self.frame_size_input[0].trim().parse::<u32>(),
+                                self.frame_size_input[1].trim().parse::<u32>(),
+                            ) {
+                                self.project.frame_width = w;
+                                self.project.frame_height = h;
+                                self.pending_sheet_load = Some(self.project.sprite_sheet.clone());
+                                self.show_frame_size_dialog = false;
+                            }
+                        }
+                        if ui.button("Cancel").clicked() {
+                            self.show_frame_size_dialog = false;
+                        }
+                    });
+                });
+        }
+
         egui::SidePanel::left("side_panel")
             .default_width(220.0)
             .show(ctx, |ui| {
