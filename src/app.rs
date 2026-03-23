@@ -138,16 +138,16 @@ impl eframe::App for Spriter {
                         ui.text_edit_singleline(&mut self.frame_size_input[1]);
                     });
                     ui.horizontal(|ui| {
-                        if ui.button("OK").clicked() {
-                            if let (Ok(w), Ok(h)) = (
+                        if ui.button("OK").clicked()
+                            && let (Ok(w), Ok(h)) = (
                                 self.frame_size_input[0].trim().parse::<u32>(),
                                 self.frame_size_input[1].trim().parse::<u32>(),
-                            ) {
-                                self.project.frame_width = w;
-                                self.project.frame_height = h;
-                                self.pending_sheet_load = Some(self.project.sprite_sheet.clone());
-                                self.show_frame_size_dialog = false;
-                            }
+                            )
+                        {
+                            self.project.frame_width = w;
+                            self.project.frame_height = h;
+                            self.pending_sheet_load = Some(self.project.sprite_sheet.clone());
+                            self.show_frame_size_dialog = false;
                         }
                         if ui.button("Cancel").clicked() {
                             self.show_frame_size_dialog = false;

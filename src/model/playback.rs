@@ -4,13 +4,19 @@ pub struct PlaybackState {
     pub elapsed: f32,
 }
 
-impl PlaybackState {
-    pub fn new() -> Self {
+impl Default for PlaybackState {
+    fn default() -> Self {
         Self {
             current_frame_index: 0,
             playing: false,
             elapsed: 0.0,
         }
+    }
+}
+
+impl PlaybackState {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn advance(&mut self, dt: f32, fps: f32, total_frames: usize, looping: bool) {

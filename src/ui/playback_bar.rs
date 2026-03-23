@@ -31,23 +31,21 @@ pub fn show(ui: &mut Ui, app: &mut Spriter) {
 
         let mut fps = app.current_animation().map(|a| a.fps).unwrap_or(12.0);
         ui.label("FPS:");
-        if ui.add(egui::Slider::new(&mut fps, 1.0..=60.0).fixed_decimals(0)).changed() {
-            if let Some(preset) = app.project.presets.get_mut(app.selected_preset) {
-                if let Some(anim) = preset.animations.get_mut(app.selected_animation) {
-                    anim.fps = fps;
-                }
-            }
+        if ui.add(egui::Slider::new(&mut fps, 1.0..=60.0).fixed_decimals(0)).changed()
+            && let Some(preset) = app.project.presets.get_mut(app.selected_preset)
+            && let Some(anim) = preset.animations.get_mut(app.selected_animation)
+        {
+            anim.fps = fps;
         }
 
         ui.separator();
 
         let mut looping = app.current_animation().map(|a| a.looping).unwrap_or(true);
-        if ui.checkbox(&mut looping, "Loop").changed() {
-            if let Some(preset) = app.project.presets.get_mut(app.selected_preset) {
-                if let Some(anim) = preset.animations.get_mut(app.selected_animation) {
-                    anim.looping = looping;
-                }
-            }
+        if ui.checkbox(&mut looping, "Loop").changed()
+            && let Some(preset) = app.project.presets.get_mut(app.selected_preset)
+            && let Some(anim) = preset.animations.get_mut(app.selected_animation)
+        {
+            anim.looping = looping;
         }
     });
 }
