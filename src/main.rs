@@ -1,7 +1,4 @@
-mod app;
-mod io;
-mod model;
-mod ui;
+use spriter::app;
 
 fn main() -> eframe::Result<()> {
     let options = eframe::NativeOptions {

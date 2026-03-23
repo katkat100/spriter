@@ -23,3 +23,15 @@ pub struct Animation {
     pub fps: f32,
     pub looping: bool,
 }
+
+impl Default for Project {
+    fn default() -> Self {
+        Self {
+            name: "untitled".to_string(),
+            sprite_sheet: PathBuf::new(),
+            frame_width: 32,
+            frame_height: 32,
+            presets: Vec::new(),
+        }
+    }
+}
