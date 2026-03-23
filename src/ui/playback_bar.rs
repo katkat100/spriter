@@ -1,5 +1,7 @@
 use eframe::egui;
 
-pub fn show_playback_bar(_ui: &mut egui::Ui) {
+use crate::app::Spriter;
+
+pub fn show(_ui: &mut egui::Ui, _app: &mut Spriter) {
     // TODO: implement in Task 7
 }
