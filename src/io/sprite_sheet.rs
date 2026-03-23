@@ -1,3 +1,6 @@
+use egui;
+use image::GenericImageView;
+
 pub struct SpriteSheet {
     pub width: u32,
     pub height: u32,
@@ -35,5 +38,32 @@ impl SpriteSheet {
 
     pub fn remainder_y(&self) -> u32 {
         self.height % self.frame_height
+    }
+
+    pub fn load_frames(path: &std::path::Path, frame_width: u32, frame_height: u32)
+        -> Result<(Self, Vec<egui::ColorImage>), String>
+    {
+        let img = image::open(path).map_err(|e| format!("Failed to load image: {e}"))?;
+        let (img_w, img_h) = img.dimensions();
+        let sheet = Self::new(img_w, img_h, frame_width, frame_height);
+        let rgba = img.to_rgba8();
+
+        let mut frames = Vec::with_capacity(sheet.total_frames());
+        for idx in 0..sheet.total_frames() {
+            let (ox, oy) = sheet.frame_origin(idx);
+            let mut pixels = Vec::with_capacity((frame_width * frame_height) as usize);
+            for y in oy..(oy + frame_height) {
+                for x in ox..(ox + frame_width) {
+                    let p = rgba.get_pixel(x, y);
+                    pixels.push(egui::Color32::from_rgba_unmultiplied(p[0], p[1], p[2], p[3]));
+                }
+            }
+            frames.push(egui::ColorImage {
+                size: [frame_width as usize, frame_height as usize],
+                pixels,
+            });
+        }
+
+        Ok((sheet, frames))
     }
 }
